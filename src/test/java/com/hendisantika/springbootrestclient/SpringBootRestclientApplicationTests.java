@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClient;
 import reactor.netty.http.client.HttpClientConfig;
 
@@ -39,5 +41,18 @@ class SpringBootRestclientApplicationTests {
 
         Assertions.assertNotNull(employeeList);
         Assertions.assertEquals(4, employeeList.size());
+    }
+
+    @Test
+    public void testGetAll_WithResponseEntity() {
+        ResponseEntity<List> responseEntity = restClient.get()
+                .uri("/employees")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .toEntity(List.class);
+
+        Assertions.assertNotNull(responseEntity.getBody());
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
+        Assertions.assertNotEquals(null, responseEntity.getHeaders());
     }
 }
