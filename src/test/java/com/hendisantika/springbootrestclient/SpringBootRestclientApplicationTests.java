@@ -55,4 +55,18 @@ class SpringBootRestclientApplicationTests {
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
         Assertions.assertNotEquals(null, responseEntity.getHeaders());
     }
+
+    @Test
+    public void testGetById() {
+        Employee employee = restClient.get()
+                .uri("/employees/1")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(Employee.class);
+
+        Assertions.assertNotNull(employee);
+        Assertions.assertEquals(1, employee.getId());
+        Assertions.assertEquals("Lokesh", employee.getName());
+        Assertions.assertEquals("Active", employee.getStatus());
+    }
 }
