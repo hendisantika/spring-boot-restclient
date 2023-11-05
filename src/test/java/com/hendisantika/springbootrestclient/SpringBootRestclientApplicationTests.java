@@ -92,4 +92,39 @@ class SpringBootRestclientApplicationTests {
 
         Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
     }
+
+    @Test
+    public void testPut() {
+        Employee employee = restClient.get()
+                .uri("/employees/1")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(Employee.class);
+
+        String originalName = employee.getName();
+
+        employee.setName("Updated_Name-" + originalName);
+
+        ResponseEntity<Employee> responseEntity = restClient.put()
+                .uri("/employees/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(employee)
+                .retrieve()
+                .toEntity(Employee.class);
+
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(employee.getName(), responseEntity.getBody().getName());
+
+        employee.setName(originalName);
+
+        restClient.put()
+                .uri("/employees/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(employee)
+                .retrieve()
+                .toEntity(Employee.class);
+    }
+
 }
