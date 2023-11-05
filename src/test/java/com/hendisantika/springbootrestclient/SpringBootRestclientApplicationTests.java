@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import reactor.netty.http.client.HttpClientConfig;
 
@@ -127,4 +128,17 @@ class SpringBootRestclientApplicationTests {
                 .toEntity(Employee.class);
     }
 
+    @Test
+    public void testException() {
+        HttpClientErrorException thrown = Assertions.assertThrows(HttpClientErrorException.class,
+                () -> {
+                    Employee employee = restClient.get()
+                            .uri("/employees/5")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .retrieve()
+                            .body(Employee.class);
+                });
+
+        Assertions.assertEquals(404, thrown.getStatusCode().value());
+    }
 }
