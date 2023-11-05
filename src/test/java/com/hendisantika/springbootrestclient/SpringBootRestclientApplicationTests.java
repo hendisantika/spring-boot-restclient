@@ -1,5 +1,6 @@
 package com.hendisantika.springbootrestclient;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hendisantika.springbootrestclient.model.Employee;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -141,4 +142,26 @@ class SpringBootRestclientApplicationTests {
 
         Assertions.assertEquals(404, thrown.getStatusCode().value());
     }
+
+    @Test
+    public void testExchangeMethod() {
+        List<Employee> list = restClient.get()
+                .uri("/employees")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange((request, response) -> {
+                    List apiResponse = null;
+                    if (response.getStatusCode().is4xxClientError()
+                            || response.getStatusCode().is5xxServerError()) {
+                        Assertions.fail("Error occurred in test execution. Check test data and api url.");
+                    } else {
+                        ObjectMapper mapper = new ObjectMapper();
+                        apiResponse = mapper.readValue(response.getBody(), List.class);
+                    }
+                    return apiResponse;
+                });
+
+        Assertions.assertEquals(4, list.size());
+    }
+
+}
 }
