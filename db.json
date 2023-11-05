@@ -1,0 +1,24 @@
+{
+  "employees": [
+    {
+      "id": 1,
+      "name": "Naruto",
+      "status": "Active"
+    },
+    {
+      "id": 2,
+      "name": "Sasuke",
+      "status": "Inactive"
+    },
+    {
+      "id": 3,
+      "name": "Sakura",
+      "status": "Active"
+    },
+    {
+      "id": 4,
+      "name": "Kakashi",
+      "status": "Inactive"
+    }
+  ]
+}
