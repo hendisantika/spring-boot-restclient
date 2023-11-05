@@ -1,6 +1,9 @@
 package com.hendisantika.springbootrestclient;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
 import org.apache.hc.client5.http.socket.PlainConnectionSocketFactory;
@@ -9,6 +12,7 @@ import org.apache.hc.client5.http.ssl.TrustSelfSignedStrategy;
 import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.apache.hc.core5.ssl.SSLContextBuilder;
+import org.apache.hc.core5.util.Timeout;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -16,6 +20,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 
 /**
  * Created by IntelliJ IDEA.
@@ -60,5 +65,17 @@ public class HttpClientConfig {
                 socketFactoryRegistry);
         poolingConnectionManager.setMaxTotal(MAX_TOTAL_CONNECTIONS);
         return poolingConnectionManager;
+    }
+
+    @Bean
+    public CloseableHttpClient httpClient() {
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectionRequestTimeout(Timeout.of(Duration.ofMillis(REQUEST_TIMEOUT)))
+                .setConnectTimeout(Timeout.of(Duration.ofMillis(CONNECT_TIMEOUT)))
+                .build();
+        return HttpClients.custom()
+                .setDefaultRequestConfig(requestConfig)
+                .setConnectionManager(poolingConnectionManager())
+                .build();
     }
 }
