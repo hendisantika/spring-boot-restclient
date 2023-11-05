@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by IntelliJ IDEA.
@@ -36,5 +37,11 @@ class WebConfiguration {
                 .requestFactory(clientHttpRequestFactory())
                 .build();
         //return RestClient.create(restTemplate());
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory());
+        return restTemplate;
     }
 }
