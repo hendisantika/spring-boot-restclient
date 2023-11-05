@@ -66,7 +66,30 @@ class SpringBootRestclientApplicationTests {
 
         Assertions.assertNotNull(employee);
         Assertions.assertEquals(1, employee.getId());
-        Assertions.assertEquals("Lokesh", employee.getName());
+        Assertions.assertEquals("Naruto", employee.getName());
         Assertions.assertEquals("Active", employee.getStatus());
+    }
+
+    @Test
+    public void testPostAndDelete() {
+        Employee newEmployee = new Employee(5L, "Naruto", "active");
+
+        ResponseEntity<Void> responseEntity = restClient.post()
+                .uri("/employees")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(newEmployee)
+                .retrieve()
+                .toBodilessEntity();
+
+        Assertions.assertEquals(HttpStatus.CREATED.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals("http://localhost:3000/employees/5",
+                responseEntity.getHeaders().get("Location").get(0));
+
+        responseEntity = restClient.delete()
+                .uri("/employees/5")
+                .retrieve()
+                .toBodilessEntity();
+
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
     }
 }
