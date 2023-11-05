@@ -4,6 +4,8 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestClient;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,6 +22,19 @@ class WebConfiguration {
 
     @Value("${REMOTE_BASE_URI:http://localhost:3000}")
     String baseURI;
+
     @Autowired
     private CloseableHttpClient httpClient;
+
+    @Bean
+    RestClient restClient() {
+        return RestClient.builder()
+                .baseUrl(baseURI)
+                //.requestInterceptor(...)
+                //.defaultHeader("AUTHORIZATION", fetchToken())
+                //.messageConverters(...)
+                .requestFactory(clientHttpRequestFactory())
+                .build();
+        //return RestClient.create(restTemplate());
+    }
 }
