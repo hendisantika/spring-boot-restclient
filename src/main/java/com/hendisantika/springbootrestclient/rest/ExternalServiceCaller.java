@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 
 /**
@@ -40,5 +37,14 @@ public class ExternalServiceCaller {
                 .body(user)
                 .retrieve()
                 .toBodilessEntity();
+    }
+
+    @GetMapping("/findById/{id}")
+    User getUser(@PathVariable String id) {
+        return restClient.get()
+                .uri("/findById/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(User.class);
     }
 }
