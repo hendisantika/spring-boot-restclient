@@ -56,7 +56,20 @@ public class ExternalServiceCaller {
                 .retrieve()
                 .toEntity(User.class);
 
-        log.info(user.getStatusCode());
+        log.info("Status Code " + user.getStatusCode());
         return user;
     }
+
+    @GetMapping("/user-not-found/{id}")
+    User userNotFound(@PathVariable String id) {
+        return restClient.get()
+                .uri("/findById/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, ((request, response) -> {
+                    throw new CustomException();
+                }))
+                .body(User.class);
+    }
+
 }
