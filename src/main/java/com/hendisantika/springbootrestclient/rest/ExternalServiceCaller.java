@@ -47,4 +47,16 @@ public class ExternalServiceCaller {
                 .retrieve()
                 .body(User.class);
     }
+
+    @GetMapping("/entityFindById/{id}")
+    ResponseEntity<User> entityFindById(@PathVariable String id) {
+        ResponseEntity<User> user = restClient.get()
+                .uri("/findById/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .toEntity(User.class);
+
+        log.info(user.getStatusCode());
+        return user;
+    }
 }
