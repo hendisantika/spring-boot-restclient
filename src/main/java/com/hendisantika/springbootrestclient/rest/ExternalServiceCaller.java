@@ -1,8 +1,10 @@
 package com.hendisantika.springbootrestclient.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hendisantika.springbootrestclient.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -70,6 +72,31 @@ public class ExternalServiceCaller {
                     throw new CustomException();
                 }))
                 .body(User.class);
+    }
+
+    @GetMapping("/userWithExchange/{id}")
+    User userWithExchange(@PathVariable String id) {
+        return restClient.get()
+                .uri("/findById/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange((request, response) -> {
+                    if (!response.getStatusCode().is2xxSuccessful()) {
+                        throw new CustomException();
+                    }
+
+                    ObjectMapper object = new ObjectMapper();
+                    User user = object.readValue(response.getBody(), User.class);
+
+                    return user;
+                });
+    }
+
+    class CustomException extends RuntimeException {
+        private static final long serialVersionUID = -5741490213721743756L;
+
+        public CustomException() {
+            super("User not found");
+        }
     }
 
 }
