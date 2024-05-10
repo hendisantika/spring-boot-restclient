@@ -6,6 +6,9 @@ import com.hendisantika.springbootrestclient.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Created by IntelliJ IDEA.
  * Project : spring-boot-restclient
@@ -38,5 +41,13 @@ public class EmployeeServiceImpl implements EmployeeService {
                 );
 
         return EmployeeConverter.mapToEmployeeDto(existingEmployee);
+    }
+
+    @Override
+    public List<EmployeeDto> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        return employees.stream()
+                .map(employee -> EmployeeConverter.mapToEmployeeDto(employee))
+                .collect(Collectors.toList());
     }
 }
