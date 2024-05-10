@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,5 +29,10 @@ public class EmployeeJdbcRepository {
     public List<Employee> findAll() {
         String sql = "SELECT * FROM employees";
         return jdbcClient.sql(sql).query(Employee.class).list();
+    }
+
+    public Optional<Employee> findById(Long id) {
+        String sql = "SELECT * FROM employees WHERE id = :id";
+        return jdbcClient.sql(sql).param("id", id).query(Employee.class).optional();
     }
 }
