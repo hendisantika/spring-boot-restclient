@@ -57,4 +57,24 @@ class RestClientServiceTest {
 
         System.out.println(employeeDto);
     }
+
+    @Order(3)
+    @Test
+    public void updateEmployee() {
+        Long employeeId = 1L;
+
+        EmployeeDto updatedEmployee = new EmployeeDto();
+        updatedEmployee.setFirstName("Ramesh");
+        updatedEmployee.setLastName("Fadatare");
+        updatedEmployee.setEmail("ramesh@gmail.com");
+
+        EmployeeDto result = restClient.put()
+                .uri("/api/employees/{id}", employeeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(updatedEmployee)
+                .retrieve()
+                .body(EmployeeDto.class);
+
+        System.out.println(result.toString());
+    }
 }
