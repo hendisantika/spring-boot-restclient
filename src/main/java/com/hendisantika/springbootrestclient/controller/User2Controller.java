@@ -5,6 +5,7 @@ import com.hendisantika.springbootrestclient.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,5 +32,12 @@ public class User2Controller {
     @GetMapping
     public ResponseEntity<List<User2>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User2> getUserById(@PathVariable Long id) {
+        return userService.getUserById(id)
+                .map(entity -> ResponseEntity.ok(entity))
+                .orElse(ResponseEntity.notFound().build());
     }
 }
