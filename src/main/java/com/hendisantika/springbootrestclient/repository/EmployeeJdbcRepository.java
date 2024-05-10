@@ -68,4 +68,13 @@ public class EmployeeJdbcRepository {
         }
         return employee;
     }
+
+    @Transactional
+    public void deleteById(Long id) {
+        String sql = "DELETE FROM employees WHERE id = ?";
+        int count = jdbcClient.sql(sql).param(1, id).update();
+        if (count == 0) {
+            throw new RuntimeException("Employee not found");
+        }
+    }
 }
