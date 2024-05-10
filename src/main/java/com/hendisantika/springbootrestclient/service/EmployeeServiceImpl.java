@@ -1,7 +1,7 @@
 package com.hendisantika.springbootrestclient.service;
 
+import com.hendisantika.springbootrestclient.converter.EmployeeConverter;
 import com.hendisantika.springbootrestclient.dto.EmployeeDto;
-import com.hendisantika.springbootrestclient.model.Employee;
 import com.hendisantika.springbootrestclient.model.Employee2;
 import com.hendisantika.springbootrestclient.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
@@ -28,15 +28,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto createEmployee(EmployeeDto employeeDto) {
-        Employee employee = EmployeeConverter.mapToEmployee(employeeDto);
-        Employee savedEmployee = employeeRepository.save(employee);
+        Employee2 employee = EmployeeConverter.mapToEmployee(employeeDto);
+        Employee2 savedEmployee = employeeRepository.save(employee);
         return EmployeeConverter.mapToEmployeeDto(savedEmployee);
     }
 
     @Override
     public EmployeeDto getEmployeeById(Long employeeId) {
         // we need to check whether employee with given id is exist in DB or not
-        Employee existingEmployee = employeeRepository.findById(employeeId)
+        Employee2 existingEmployee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Employee not exists with a given id : " + employeeId)
                 );
@@ -46,7 +46,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDto> getAllEmployees() {
-        List<Employee> employees = employeeRepository.findAll();
+        List<Employee2> employees = employeeRepository.findAll();
         return employees.stream()
                 .map(employee -> EmployeeConverter.mapToEmployeeDto(employee))
                 .collect(Collectors.toList());
@@ -55,7 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto updateEmployee(EmployeeDto employeeDto) {
         // we need to check whether employee with given id is exist in DB or not
-        Employee existingEmployee = employeeRepository.findById(employeeDto.getId())
+        Employee2 existingEmployee = employeeRepository.findById(employeeDto.getId())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Employee not exists with a given id : " + employeeDto.getId())
                 );
