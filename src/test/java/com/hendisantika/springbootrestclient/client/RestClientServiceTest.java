@@ -94,4 +94,17 @@ class RestClientServiceTest {
             System.out.println(employeeDto.toString());
         });
     }
+
+    @Order(5)
+    @Test
+    public void deleteEmployee() {
+        Long employeeId = 1L;
+
+        String response = restClient.delete()
+                .uri("/api/employees/{id}", employeeId)
+                .retrieve()
+                .body(String.class);
+
+        System.out.println(response);
+    }
 }
