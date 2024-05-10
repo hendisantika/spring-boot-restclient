@@ -44,4 +44,17 @@ class RestClientServiceTest {
 
         System.out.println(savedEmployee.toString());
     }
+
+    @Order(2)
+    @Test
+    public void getEmployeeById() {
+        Long employeeId = 1L;
+
+        EmployeeDto employeeDto = restClient.get()
+                .uri("/api/employees/{id}", employeeId)
+                .retrieve()
+                .body(EmployeeDto.class);
+
+        System.out.println(employeeDto);
+    }
 }
