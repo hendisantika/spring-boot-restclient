@@ -5,6 +5,8 @@ import com.hendisantika.springbootrestclient.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,4 +36,12 @@ public class Employee2Controller {
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }
 
+    // build get employee by id REST API
+    // http://localhost:8080/api/employees/1
+    @GetMapping("{id}")
+    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable("id") Long employeeId) {
+        EmployeeDto employee = employeeService.getEmployeeById(employeeId);
+        //return new ResponseEntity<>(employee, HttpStatus.OK);
+        return ResponseEntity.ok(employee);
+    }
 }
