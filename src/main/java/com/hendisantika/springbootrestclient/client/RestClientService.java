@@ -1,5 +1,8 @@
 package com.hendisantika.springbootrestclient.client;
 
+import com.hendisantika.springbootrestclient.dto.EmployeeDto;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -13,6 +16,7 @@ import org.springframework.web.client.RestClient;
  * Time: 18:15
  * To change this template use File | Settings | File Templates.
  */
+@Slf4j
 @Service
 public class RestClientService {
     private final RestClient restClient;
@@ -22,4 +26,18 @@ public class RestClientService {
                 .baseUrl("http://localhost:8080")
                 .build();
     }
+
+    private void createEmployee() {
+        EmployeeDto newEmployee = new EmployeeDto(null, "admin", "admin", "admin@gmail.com");
+
+        EmployeeDto savedEmployee = restClient.post()
+                .uri("/posts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(newEmployee)
+                .retrieve()
+                .body(EmployeeDto.class);
+
+        log.info(savedEmployee.toString());
+    }
+
 }
