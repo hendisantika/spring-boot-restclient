@@ -2,6 +2,7 @@ package com.hendisantika.springbootrestclient.service;
 
 import com.hendisantika.springbootrestclient.dto.EmployeeDto;
 import com.hendisantika.springbootrestclient.model.Employee;
+import com.hendisantika.springbootrestclient.model.Employee2;
 import com.hendisantika.springbootrestclient.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream()
                 .map(employee -> EmployeeConverter.mapToEmployeeDto(employee))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public EmployeeDto updateEmployee(EmployeeDto employeeDto) {
+        // we need to check whether employee with given id is exist in DB or not
+        Employee existingEmployee = employeeRepository.findById(employeeDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Employee not exists with a given id : " + employeeDto.getId())
+                );
+
+        // convert EmployeeDto to Employee JPA entity
+        Employee2 employee = EmployeeConverter.mapToEmployee(employeeDto);
+        return EmployeeConverter.mapToEmployeeDto(employeeRepository.save(employee));
     }
 }
