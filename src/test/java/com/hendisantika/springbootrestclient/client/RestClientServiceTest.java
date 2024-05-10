@@ -2,12 +2,14 @@ package com.hendisantika.springbootrestclient.client;
 
 import com.hendisantika.springbootrestclient.dto.EmployeeDto;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
@@ -106,5 +108,20 @@ class RestClientServiceTest {
                 .body(String.class);
 
         System.out.println(response);
+    }
+
+    @Test
+    public void exceptionHandlingClientErrorDemo() {
+        HttpClientErrorException thrown = Assertions.assertThrows(HttpClientErrorException.class,
+                () -> {
+
+                    EmployeeDto employee = restClient.get()
+                            .uri("/employees/404")
+                            .accept(MediaType.APPLICATION_JSON)
+                            .retrieve()
+                            .body(EmployeeDto.class);
+                });
+
+        Assertions.assertEquals(404, thrown.getStatusCode().value());
     }
 }
