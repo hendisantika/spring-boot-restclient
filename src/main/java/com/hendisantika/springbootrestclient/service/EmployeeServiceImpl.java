@@ -1,5 +1,7 @@
 package com.hendisantika.springbootrestclient.service;
 
+import com.hendisantika.springbootrestclient.dto.EmployeeDto;
+import com.hendisantika.springbootrestclient.model.Employee;
 import com.hendisantika.springbootrestclient.repository.EmployeeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,4 +21,11 @@ import org.springframework.stereotype.Service;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
+
+    @Override
+    public EmployeeDto createEmployee(EmployeeDto employeeDto) {
+        Employee employee = EmployeeConverter.mapToEmployee(employeeDto);
+        Employee savedEmployee = employeeRepository.save(employee);
+        return EmployeeConverter.mapToEmployeeDto(savedEmployee);
+    }
 }
