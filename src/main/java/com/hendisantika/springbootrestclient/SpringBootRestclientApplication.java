@@ -1,54 +1,18 @@
 package com.hendisantika.springbootrestclient;
 
-import com.hendisantika.springbootrestclient.model.Employee;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.PosixFilePermissions;
 
 @SpringBootApplication
-@RequiredArgsConstructor
-@Slf4j
 public class SpringBootRestclientApplication implements CommandLineRunner {
-    private final WebClient webClient;
     public static void main(String[] args) {
         SpringApplication.run(SpringBootRestclientApplication.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-
-        FileAttribute<?>[] attributes = {
-                PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-r--r--"))
-        };
-        Path tempFile = Files.createTempFile(Files.createTempDirectory("temp-dir"), "testData-", ".txt", attributes);
-
-        log.info(tempFile.toAbsolutePath().toString());
-
-        webClient.post()
-                .uri("/employees")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new Employee(180, "Naruto", "Active"))
-                .retrieve()
-                .toBodilessEntity()
-                .subscribe(responseEntity -> {
-                    if (responseEntity.getStatusCode().is2xxSuccessful()) {
-
-                        int statusCode = responseEntity.getStatusCode().value();
-                        String locationURI = responseEntity.getHeaders().getLocation().toString();
-
-                        log.info("Status: " + statusCode);
-                        log.info("Location URI: " + locationURI);
-                    }
-                });
+        System.out.println("Spring Boot RestClient Application Started Successfully!");
 
     /*webClient.post()
         .uri("/create")

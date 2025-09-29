@@ -28,7 +28,10 @@ public class RestClientService {
     }
 
     private void createEmployee() {
-        EmployeeDto newEmployee = new EmployeeDto(null, "admin", "admin", "admin@gmail.com");
+        EmployeeDto newEmployee = new EmployeeDto();
+        newEmployee.setFirstName("admin");
+        newEmployee.setLastName("admin");
+        newEmployee.setEmail("admin@gmail.com");
 
         EmployeeDto savedEmployee = restClient.post()
                 .uri("/posts")
@@ -37,7 +40,7 @@ public class RestClientService {
                 .retrieve()
                 .body(EmployeeDto.class);
 
-        log.info(savedEmployee.toString());
+        System.out.println(savedEmployee.toString());
     }
 
 }

@@ -2,7 +2,6 @@ package com.hendisantika.springbootrestclient.controller;
 
 import com.hendisantika.springbootrestclient.model.User2;
 import com.hendisantika.springbootrestclient.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,11 +26,13 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/user")
-@RequiredArgsConstructor
 public class User2Controller {
 
-    // Declare the service as final to ensure its immutability
     private final UserService userService;
+
+    public User2Controller(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public ResponseEntity<List<User2>> getAllUsers() {

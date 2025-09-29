@@ -2,7 +2,6 @@ package com.hendisantika.springbootrestclient.repository;
 
 import com.hendisantika.springbootrestclient.model.Employee;
 import com.hendisantika.springbootrestclient.model.Employee2;
-import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -25,10 +24,13 @@ import java.util.Optional;
  */
 @Repository
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
 public class EmployeeJdbcRepository {
 
     private final JdbcClient jdbcClient;
+
+    public EmployeeJdbcRepository(JdbcClient jdbcClient) {
+        this.jdbcClient = jdbcClient;
+    }
 
     public List<Employee> findAll() {
         String sql = "SELECT * FROM employees";
