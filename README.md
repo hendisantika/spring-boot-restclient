@@ -1,6 +1,11 @@
 # Spring Boot RestClient Demo Application
 
-A comprehensive demonstration of Spring Boot 3.3.3 with RestClient functionality, showcasing various HTTP client
+[![Java CI with Maven](https://github.com/hendisantika/spring-boot-restclient/actions/workflows/maven.yml/badge.svg)](https://github.com/hendisantika/spring-boot-restclient/actions/workflows/maven.yml)
+![Java](https://img.shields.io/badge/Java-25-orange?logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.1.2-6DB33F?logo=springboot)
+![Dependabot](https://img.shields.io/badge/Dependabot-enabled-025E8C?logo=dependabot)
+
+A comprehensive demonstration of Spring Boot 4.1.2 (Java 25) with RestClient functionality, showcasing various HTTP client
 patterns, JPA integration, and REST API development.
 
 ## 📋 Table of Contents
@@ -16,6 +21,7 @@ patterns, JPA integration, and REST API development.
 - [Database](#database)
 - [Testing](#testing)
 - [RestClient Examples](#restclient-examples)
+- [CI/CD & Dependency Management](#-cicd--dependency-management)
 - [Contributing](#contributing)
 
 ## 🎯 Overview
@@ -43,20 +49,23 @@ traditional web development patterns. It includes examples of:
 
 ## 🛠 Technology Stack
 
-- **Java**: 21
-- **Spring Boot**: 3.3.3
-- **Spring Framework**: 6.1.12
-- **Spring Data JPA**: 3.3.3
-- **Spring WebFlux**: 6.1.12
-- **H2 Database**: Runtime
-- **Apache HTTP Components**: 5.4.1
-- **Maven**: 3.x
-- **Hibernate**: 6.5.2
+- **Java**: 25 (LTS)
+- **Spring Boot**: 4.1.2
+- **Spring Framework**: 7.0.10
+- **Spring Data**: 2026.0.2
+- **Spring WebFlux**: 7.0.10
+- **Hibernate ORM**: 7.4.13.Final
+- **Jackson**: 3.1.7 (`tools.jackson.*` packages)
+- **H2 Database**: 2.4.240 (runtime)
+- **Apache HttpClient 5**: 5.6.5 / HttpCore 5.4.4
+- **Lombok**: 1.18.48
+- **JUnit Jupiter**: 6.0.3
+- **Maven**: 3.10.0 (via Maven Wrapper)
 
 ## 📋 Prerequisites
 
-- Java 21 or higher
-- Maven 3.6 or higher
+- Java 25 or higher (e.g. [Eclipse Temurin 25](https://adoptium.net/))
+- Maven is optional — the bundled Maven Wrapper (`./mvnw`) downloads Maven 3.10.0 automatically
 - Git (for cloning the repository)
 
 ## 🚀 Getting Started
@@ -71,19 +80,19 @@ cd spring-boot-restclient
 ### 2. Build the Project
 
 ```bash
-mvn clean compile
+./mvnw clean package
 ```
 
 ### 3. Run the Application
 
 ```bash
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
-Or alternatively:
+Or run the packaged jar:
 
 ```bash
-mvn compile exec:java -Dexec.mainClass="com.hendisantika.springbootrestclient.SpringBootRestclientApplication"
+java -jar target/spring-boot-restclient-0.0.1-SNAPSHOT.jar
 ```
 
 ### 4. Access the Application
@@ -219,8 +228,12 @@ user:
 ### Running Tests
 
 ```bash
-mvn test
+./mvnw test
 ```
+
+> **Note:** `SpringBootRestclientApplicationTests` and `RestClientServiceTest` are integration-style tests that call
+> live HTTP services (the app on `http://localhost:8080` and external APIs), so they are annotated with `@Disabled`
+> and skipped in CI. Start the required services and remove `@Disabled` to run them locally.
 
 ### Manual Testing
 
@@ -294,17 +307,42 @@ public User getUserWithExchange(String id) {
                     throw new CustomException("Request failed");
                 }
 
+                // Jackson 3: tools.jackson.databind.ObjectMapper (no checked IOException)
                 ObjectMapper mapper = new ObjectMapper();
                 return mapper.readValue(response.getBody(), User.class);
             });
 }
 ```
 
+## 🔄 CI/CD & Dependency Management
+
+### GitHub Actions
+
+The [`Java CI with Maven`](.github/workflows/maven.yml) workflow runs on every push and pull request to `main`
+(and can be triggered manually via `workflow_dispatch`). It:
+
+- Sets up **Temurin JDK 25** with Maven dependency caching
+- Builds and tests the project with the Maven Wrapper (`./mvnw -B package`)
+- Cancels superseded runs on the same branch (`concurrency`) and times out after 30 minutes
+- Submits the Maven dependency graph to GitHub on pushes to `main`, improving Dependabot security alerts
+
+### Dependabot
+
+[`dependabot.yml`](.github/dependabot.yml) keeps dependencies up to date:
+
+| Ecosystem      | Schedule                        | Grouping                                                                   | Commit prefix                     |
+|----------------|---------------------------------|----------------------------------------------------------------------------|-----------------------------------|
+| Maven          | Daily, 05:00 Asia/Jakarta       | `spring-boot`, `apache-httpcomponents`, `maven-plugins-and-tooling`, `minor-and-patch` | `chore(deps)` / `chore(deps-dev)` |
+| GitHub Actions | Weekly (Monday), 05:00 Asia/Jakarta | All actions in a single PR                                              | `ci(deps)`                        |
+
+Pull requests are labelled (`dependencies`, `java` / `github_actions`) and assigned automatically, and their
+titles follow [Conventional Commits](https://www.conventionalcommits.org/).
+
 ## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
+3. Commit your changes using [Conventional Commits](https://www.conventionalcommits.org/) (`git commit -m 'feat: add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
