@@ -4,10 +4,53 @@ updates:
     directory: "/"
     schedule:
       interval: daily
-      time: '05:00'
+      time: "05:00"
       timezone: Asia/Jakarta
     open-pull-requests-limit: 10
-  - package-ecosystem: "github-actions"
+    target-branch: main
+    labels:
+      - dependencies
+      - java
+    assignees:
+      - hendisantika
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: scope
+    groups:
+      spring-boot:
+        patterns:
+          - "org.springframework.boot:*"
+          - "org.springframework:*"
+      apache-httpcomponents:
+        patterns:
+          - "org.apache.httpcomponents.*"
+      maven-plugins-and-tooling:
+        patterns:
+          - "org.apache.maven*"
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: weekly
+      day: monday
+      time: "05:00"
+      timezone: Asia/Jakarta
+    open-pull-requests-limit: 5
+    target-branch: main
+    labels:
+      - dependencies
+      - github_actions
+    assignees:
+      - hendisantika
+    commit-message:
+      prefix: "ci"
+      include: scope
+    groups:
+      github-actions:
+        patterns:
+          - "*"
