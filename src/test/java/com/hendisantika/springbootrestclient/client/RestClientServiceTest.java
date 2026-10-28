@@ -1,8 +1,8 @@
 package com.hendisantika.springbootrestclient.client;
 
 import com.hendisantika.springbootrestclient.dto.EmployeeDto;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@RequiredArgsConstructor
+@Disabled("Requires the application running on http://localhost:8080")
 class RestClientServiceTest {
     private final RestClient restClient;
 
