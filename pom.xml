@@ -14,7 +14,7 @@
 	<name>spring-boot-restclient</name>
 	<description>Demo project for Spring Boot Rest Client</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>25</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
